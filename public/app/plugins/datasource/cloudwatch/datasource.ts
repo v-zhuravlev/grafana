@@ -226,6 +226,12 @@ export default class CloudWatchDatasource extends DataSourceApi<CloudWatchQuery>
             return acc;
           }
 
+          // Temporary in order to display used searchExpressions in the query editor ui
+          appEvents.emit('cloudwatch-search-expression-received', {
+            refId: queryResult.refId,
+            searchExpressions: queryResult.meta.searchExpressions,
+          });
+
           const link = this.buildCloudwatchConsoleUrl(
             queryRequest,
             from.toISOString(),
