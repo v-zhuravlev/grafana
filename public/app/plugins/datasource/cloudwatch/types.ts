@@ -11,4 +11,5 @@ export interface CloudWatchQuery extends DataQuery {
   expression: string;
   alias: string;
   highResolution: boolean;
+  matchExact: boolean;
 }
