@@ -1,4 +1,5 @@
-import React, { SFC } from 'react';
+import React, { FunctionComponent } from 'react';
+import { SelectableStrings } from '../types';
 import { SelectableValue } from '@grafana/data';
 import { Segment } from '@grafana/ui';
 
@@ -6,24 +7,20 @@ export interface Props {
   values: string[];
   onChange: (values: string[]) => void;
   variableOptionGroup: SelectableValue<string>;
+  stats: SelectableStrings;
 }
-
-const options: Array<SelectableValue<string>> = ['Average', 'Maximum', 'Minimum', 'Sum', 'SampleCount'].map(value => ({
-  label: value,
-  value: value,
-}));
 
 const removeText = '-- remove stat --';
 const removeOption: SelectableValue<string> = { label: removeText, value: removeText };
 
-export const Stats: SFC<Props> = ({ values, onChange, variableOptionGroup }) => (
+export const Stats: FunctionComponent<Props> = ({ stats, values, onChange, variableOptionGroup }) => (
   <>
     {values &&
       values.map((value, index) => (
         <Segment
           key={value + index}
           value={value}
-          options={[removeOption, ...options, variableOptionGroup]}
+          options={[removeOption, ...stats, variableOptionGroup]}
           onChange={value =>
             onChange(
               value === removeText
@@ -33,7 +30,7 @@ export const Stats: SFC<Props> = ({ values, onChange, variableOptionGroup }) => 
           }
         />
       ))}
-    {values.length !== options.length && (
+    {values.length !== stats.length && (
       <Segment
         Component={
           <a className="gf-form-label query-part">
@@ -42,7 +39,7 @@ export const Stats: SFC<Props> = ({ values, onChange, variableOptionGroup }) => 
         }
         allowCustomValue={true}
         onChange={(value: string) => onChange([...values, value])}
-        options={options.filter(({ value }) => !values.includes(value))}
+        options={stats.filter(({ value }) => !values.includes(value))}
       />
     )}
   </>
